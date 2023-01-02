@@ -1,8 +1,8 @@
 {
   "name": "reviewscape",
   "version": "1.0.0",
-  "description": "- Backend Application server built for a product review and survey mobile application.",
-  "main": "index.js",
+  "description": "Backend Application server built for a product review and survey mobile application.",
+  "main": "server.js",
   "scripts": {
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -w ./dist dist/src/server.js\"",
     "migrate": "prisma migrate dev --name init-models",
