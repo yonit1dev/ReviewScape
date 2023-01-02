@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -w ./dist dist/src/server.js\"",
+    "migrate": "prisma migrate dev --name init-models",
     "test": "jest"
   },
   "repository": {

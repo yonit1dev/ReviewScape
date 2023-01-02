@@ -1,5 +1,6 @@
 dist
 package-lock.json
+prisma/migrations
 
 # Logs
 logs
