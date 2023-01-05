@@ -1,8 +1,3 @@
-enum Role {
-  ADMIN = "ADMIN",
-  USER = "USER",
-}
-
 class User {
   constructor(
     private readonly id: number,
@@ -11,7 +6,7 @@ class User {
     private readonly email: string,
     private readonly password: string,
     private readonly phone: string,
-    private readonly role: Role,
+    private readonly role: Role[],
     private readonly token: Array<string>,
     private readonly wishlist: Array<object>,
     private readonly reviews: Array<object>,
@@ -27,6 +22,11 @@ interface UserDto {
   password?: string;
   phone?: string;
   role: string;
+}
+
+enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
 }
 
 export { User, UserDto };

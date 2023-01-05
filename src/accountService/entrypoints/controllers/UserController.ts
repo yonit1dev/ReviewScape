@@ -13,12 +13,20 @@ export default class UserController {
     try {
       const { fullName, email, username, password, phone, role } = req.body;
 
+      if (!(fullName && email && username && password && phone)) {
+        const error: errorResponse = {
+          error: ["Body invalid. Provide values for user parameter"],
+          message: "Invalid Request",
+        };
+        return res.status(401).json(error);
+      }
+
       await this.registerUsecase
         .execute(fullName, email, username, password, phone, role)
         .then((newUser) => {
           const success: successResponse = {
             message: "Created user successfully",
-            response: newUser,
+            data: newUser,
           };
           return res.status(201).json(success);
         })
@@ -46,7 +54,7 @@ export default class UserController {
         .then((newUser) => {
           const success: successResponse = {
             message: "Found user successfully",
-            response: newUser,
+            data: newUser,
           };
           return res.status(200).json(success);
         })

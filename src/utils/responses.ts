@@ -1,5 +1,5 @@
 type successResponse = {
-  response: string | object | Array<object>;
+  data: string | object | Array<object>;
   message: string;
 };
 
