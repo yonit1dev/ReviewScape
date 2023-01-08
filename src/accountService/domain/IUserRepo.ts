@@ -1,16 +1,9 @@
-import { User, UserDto } from "./User";
+import { RegisterCredentials, VerifiedCredentials } from "./UserDto";
 
 export default interface IUserRepo {
-  findById(id: number): Promise<User | UserDto>;
-  findByUsername(username: string): Promise<User | UserDto>;
-  persist(
-    fullName: string,
-    email: string,
-    username: string,
-    password: string,
-    phone: string,
-    role: string
-  ): Promise<User | UserDto>;
+  findByEmail(email: string): Promise<VerifiedCredentials>;
+  findByUsername(username: string): Promise<VerifiedCredentials>;
+  persist(user: RegisterCredentials): Promise<VerifiedCredentials>;
   update(username: string, updateObj: object): Promise<boolean>;
   delete(username: string): Promise<boolean>;
 }

@@ -6,7 +6,7 @@ class User {
     private readonly email: string,
     private readonly password: string,
     private readonly phone: string,
-    private readonly role: Role[],
+    private readonly role: string[],
     private readonly token: Array<string>,
     private readonly wishlist: Array<object>,
     private readonly reviews: Array<object>,
@@ -14,19 +14,4 @@ class User {
   ) {}
 }
 
-interface UserDto {
-  id: number;
-  fullName?: string;
-  username: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  role: string;
-}
-
-enum Role {
-  ADMIN = "ADMIN",
-  USER = "USER",
-}
-
-export { User, UserDto };
+export { User };

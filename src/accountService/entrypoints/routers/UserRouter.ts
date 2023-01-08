@@ -1,29 +1,62 @@
-import { Request, Response, Router } from "express";
-import FindUsecase from "../../application/use_cases/FindUser";
-import RegisterUsecase from "../../application/use_cases/CreateUser";
-import IUserRepo from "../../domain/IUserRepo";
-import UserController from "../controllers/UserController";
+import { NextFunction, Request, Response, Router } from "express";
+import { HttpResponse } from "../../../utils/responses/http";
+import { loginController, registerController } from "../config/user";
+import {
+  authorizeController,
+  reAuthorizeController,
+} from "../config/authorize";
 
 export default class UserRouter {
-  public static configRouter(userRepo: IUserRepo): Router {
+  public static configRouter() {
     const router = Router();
 
-    const controller = UserRouter.configController(userRepo);
+    router.post("/login", async (req: Request, res: Response) => {
+      const { username, password } = req.body;
+      const result: HttpResponse = await loginController.handle({
+        username,
+        password,
+      });
 
-    router.get("/users", (req: Request, res: Response) => {
-      controller.loginUser(req, res);
+      res.status(result.status).json(result.data);
     });
 
-    router.post("/users", (req: Request, res: Response) => {
-      controller.registerUser(req, res);
+    router.post("/register", async (req: Request, res: Response) => {
+      const { fullName, email, username, password, phone, role } = req.body;
+      const response: HttpResponse = await registerController.handle({
+        fullName,
+        email,
+        username,
+        password,
+        phone,
+        role,
+      });
+
+      res.status(response.status).json(response.data);
+    });
+
+    router.get("/new-token", async (req: Request, res: Response) => {
+      const response: HttpResponse = await reAuthorizeController.handle({
+        refreshToken: req.headers.authorization ?? "",
+      });
+
+      res.status(response.status).json(response.data);
+    });
+
+    router.use(async (req: Request, res: Response, next: NextFunction) => {
+      const { userInfo } = req.body;
+
+      const result: HttpResponse = await authorizeController.handle({
+        accessToken: req.headers.authorization ?? "",
+        userInfo,
+      });
+
+      if (result.status != 200) {
+        res.status(result.status).json(result.data);
+        return;
+      }
+      next();
     });
 
     return router;
-  }
-  private static configController(authRepo: IUserRepo): UserController {
-    const registerUsecase = new RegisterUsecase(authRepo);
-    const findUsecase = new FindUsecase(authRepo);
-
-    return new UserController(registerUsecase, findUsecase);
   }
 }
