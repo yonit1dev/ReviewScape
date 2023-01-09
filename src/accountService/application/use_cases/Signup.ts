@@ -13,36 +13,40 @@ export default class RegisterUsecase {
   ) {}
 
   async execute(user: RegisterCredentials) {
-    const hashedPassword = await this.passwordService.encrypt(user.password);
+    try {
+      const hashedPassword = await this.passwordService.encrypt(user.password);
 
-    const createdUser = await this.userRepo.persist({
-      ...user,
-      password: hashedPassword,
-    });
+      const createdUser = await this.userRepo.persist({
+        ...user,
+        password: hashedPassword,
+      });
 
-    const accessToken = await this.tokenService.generate(
-      {
-        id: createdUser.id,
-        username: createdUser.username,
-      },
-      process.env.SECRET_KEY!
-    );
+      const accessToken = await this.tokenService.generate(
+        {
+          id: createdUser.id,
+          role: createdUser.role!,
+        },
+        process.env.SECRET_KEY!
+      );
 
-    const refreshToken = await this.tokenService.generate(
-      {
-        id: createdUser.id,
-        username: createdUser.username,
-      },
-      process.env.SECRET_REFRESH!
-    );
+      const refreshToken = await this.tokenService.generate(
+        {
+          id: createdUser.id,
+          role: createdUser.role!,
+        },
+        process.env.SECRET_REFRESH!
+      );
 
-    const verifiedUser: VerifiedCredentials = {
-      ...createdUser,
-      password: undefined,
-      accessToken,
-      refreshToken,
-    };
+      const verifiedUser: VerifiedCredentials = {
+        ...createdUser,
+        password: undefined,
+        accessToken,
+        refreshToken,
+      };
 
-    return verifiedUser;
+      return verifiedUser;
+    } catch (error) {
+      Promise.reject(error);
+    }
   }
 }

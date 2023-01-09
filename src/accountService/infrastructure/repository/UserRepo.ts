@@ -48,7 +48,12 @@ export default class UserRepo implements IUserRepo {
 
       return foundUser;
     } catch (error) {
-      return Promise.reject(error);
+      const errorRes: ApiError = {
+        name: "Bad Request",
+        status: StatusCode.BAD_REQUEST,
+        message: "User not found!",
+      };
+      return Promise.reject(errorRes);
     }
   }
   public async persist(
@@ -61,7 +66,7 @@ export default class UserRepo implements IUserRepo {
       const error: ApiError = {
         name: "Bad Request",
         status: StatusCode.BAD_REQUEST,
-        message: "User exists with this username",
+        message: "User already exists!",
       };
 
       return Promise.reject(error);
@@ -81,8 +86,22 @@ export default class UserRepo implements IUserRepo {
 
     return createdUser;
   }
-  update(username: string, updateObj: object): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  public async update(username: string, updateObj: object): Promise<boolean> {
+    try {
+      await this.client.user.update({
+        where: { username },
+        data: updateObj,
+      });
+
+      return true;
+    } catch (error) {
+      const errorRes: ApiError = {
+        name: "Bad Request",
+        status: StatusCode.BAD_REQUEST,
+        message: "User not found!",
+      };
+      return Promise.reject(errorRes);
+    }
   }
   public async delete(username: string): Promise<boolean> {
     const deletedUser = await this.client.user.delete({

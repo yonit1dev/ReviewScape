@@ -22,7 +22,7 @@ export default class LoginController {
       }
       return {
         status: StatusCode.SERVER_ERROR,
-        data: "Internal Server Error",
+        data: error,
       };
     }
   }

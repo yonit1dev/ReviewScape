@@ -1,5 +1,7 @@
 import { validationResult, body } from "express-validator";
 import { Request, Response, NextFunction } from "express";
+import { HttpResponse, StatusCode } from "../responses/http";
+import { ApiError } from "../responses/responses";
 
 function validationErrorHandler(
   req: Request,
@@ -9,9 +11,14 @@ function validationErrorHandler(
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      msg: "Validation Error. Check data.",
-      error: errors.array(),
+    const errorRes: ApiError = {
+      name: "Bad Request",
+      status: StatusCode.BAD_REQUEST,
+      message: "Validation error",
+    };
+    return res.status(errorRes.status).json({
+      error: errorRes,
+      where: errors.array(),
     });
   }
 

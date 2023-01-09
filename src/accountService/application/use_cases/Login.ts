@@ -32,7 +32,7 @@ export default class LoginUsecase {
       const accessToken = await this.tokenService.generate(
         {
           id: userExists.id,
-          username: userExists.username,
+          role: userExists.role!,
         },
         process.env.SECRET_KEY!
       );
@@ -40,7 +40,7 @@ export default class LoginUsecase {
       const refreshToken = await this.tokenService.generate(
         {
           id: userExists.id,
-          username: userExists.username,
+          role: userExists.role!,
         },
         process.env.SECRET_REFRESH!
       );
@@ -54,13 +54,7 @@ export default class LoginUsecase {
 
       return verifiedUser;
     } catch (error) {
-      const errorResponse: ApiError = {
-        name: "Bad Request",
-        status: StatusCode.BAD_REQUEST,
-        message: error as any,
-      };
-
-      return Promise.reject(errorResponse);
+      return Promise.reject(error);
     }
   }
 }

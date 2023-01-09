@@ -45,7 +45,7 @@ export default class AuthorizeController {
       }
       return {
         status: StatusCode.SERVER_ERROR,
-        data: "Internal Server Error",
+        data: error,
       };
     }
   }

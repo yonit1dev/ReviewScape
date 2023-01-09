@@ -70,8 +70,7 @@ export class ReAuthorizationService {
 
     const newAccessToken = await this.tokenService.generate(
       user,
-      process.env.SECRET_KEY!,
-
+      process.env.SECRET_KEY!
     );
 
     return newAccessToken;

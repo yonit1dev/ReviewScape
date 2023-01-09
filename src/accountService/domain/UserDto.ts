@@ -13,9 +13,15 @@ export type RegisterCredentials = {
   isRoot?: boolean;
 };
 
+export type UpdateCredentials = {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+};
+
 export type AuthCredentials = {
   accessToken: string;
-  userInfo: { id: number; username: string };
+  userInfo: { id: number; role: string | Array<string> };
 };
 
 export type ReAuthorizeRequest = {
