@@ -19,11 +19,10 @@ export default class ChangePasswordUsecase {
       );
 
       if (!validPassword) {
-        const errorResponse: ApiError = {
-          name: "Bad Request",
-          status: StatusCode.BAD_REQUEST,
-          message: "Wrong Password",
-        };
+        const errorResponse = new ApiError(
+          StatusCode.BAD_REQUEST,
+          "Wrong Password"
+        );
         return Promise.reject(errorResponse);
       }
 

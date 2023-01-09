@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import IUserRepo from "../../domain/IUserRepo";
-import { User } from "../../domain/User";
-import { ApiError, errorResponse } from "../../../utils/responses/responses";
+import { ApiError } from "../../../utils/responses/responses";
 import { RegisterCredentials, VerifiedCredentials } from "../../domain/UserDto";
 import { StatusCode } from "../../../utils/responses/http";
 
@@ -48,11 +47,8 @@ export default class UserRepo implements IUserRepo {
 
       return foundUser;
     } catch (error) {
-      const errorRes: ApiError = {
-        name: "Bad Request",
-        status: StatusCode.BAD_REQUEST,
-        message: "User not found!",
-      };
+      const errorRes = new ApiError(StatusCode.BAD_REQUEST, "User not found!");
+
       return Promise.reject(errorRes);
     }
   }
@@ -62,14 +58,14 @@ export default class UserRepo implements IUserRepo {
     const userExists = await this.client.user.findUnique({
       where: { username: user.username },
     });
-    if (userExists) {
-      const error: ApiError = {
-        name: "Bad Request",
-        status: StatusCode.BAD_REQUEST,
-        message: "User already exists!",
-      };
 
-      return Promise.reject(error);
+    if (userExists) {
+      const errorResponse = new ApiError(
+        StatusCode.BAD_REQUEST,
+        "User already exists"
+      );
+
+      return Promise.reject(errorResponse);
     }
 
     const newUser = await this.client.user.create({
@@ -95,11 +91,8 @@ export default class UserRepo implements IUserRepo {
 
       return true;
     } catch (error) {
-      const errorRes: ApiError = {
-        name: "Bad Request",
-        status: StatusCode.BAD_REQUEST,
-        message: "User not found!",
-      };
+      const errorRes = new ApiError(StatusCode.BAD_REQUEST, "User not found!");
+
       return Promise.reject(errorRes);
     }
   }
@@ -112,12 +105,8 @@ export default class UserRepo implements IUserRepo {
 
     if (deletedUser) return true;
 
-    const error: ApiError = {
-      name: "Bad Request",
-      status: StatusCode.BAD_REQUEST,
-      message: "User doesn't exist",
-    };
+    const errorRes = new ApiError(StatusCode.BAD_REQUEST, "User not found!");
 
-    return Promise.reject(error);
+    return Promise.reject(errorRes);
   }
 }

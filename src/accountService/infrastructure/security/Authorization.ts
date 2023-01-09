@@ -15,23 +15,20 @@ export class AuthorizeService {
     );
 
     if (!validToken) {
-      const error: ApiError = {
-        name: "Not Authroized Error",
-        status: StatusCode.FORBIDDEN,
-        message: "You don't have authorization for this request",
-      };
-
+      const error = new ApiError(
+        StatusCode.FORBIDDEN,
+        "You don't have authorization for this request"
+      );
       return error;
     }
 
     const user = await this.tokenService.decode(sanitizedToken);
 
     if (userInfo.id != undefined && userInfo.id != user.id) {
-      const error: ApiError = {
-        name: "Not Authroized Error",
-        status: StatusCode.FORBIDDEN,
-        message: "You don't have authorization for this request",
-      };
+      const error = new ApiError(
+        StatusCode.FORBIDDEN,
+        "You don't have authorization for this request"
+      );
 
       return error;
     }
@@ -57,12 +54,10 @@ export class ReAuthorizationService {
     );
 
     if (!validToken) {
-      const error: ApiError = {
-        name: "Not Authroized Error",
-        status: StatusCode.UNAUTHORIZED,
-        message: "Invalid refresh token.",
-      };
-
+      const error = new ApiError(
+        StatusCode.UNAUTHORIZED,
+        "Invalid refresh token."
+      );
       return error;
     }
 

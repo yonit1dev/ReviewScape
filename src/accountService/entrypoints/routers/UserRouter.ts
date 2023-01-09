@@ -11,7 +11,6 @@ import {
   reAuthorizeController,
 } from "../config/authorize";
 import { UserValidator } from "../../../utils/validation/validators";
-import { UpdateCredentials } from "../../domain/UserDto";
 
 export default class UserRouter {
   public static configRouter() {

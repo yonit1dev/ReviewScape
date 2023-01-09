@@ -13,7 +13,6 @@ export default class UpdateController {
     updateObj: UpdateCredentials
   ): Promise<HttpResponse> {
     try {
-      console.log(typeof updateObj);
       const updated = await this.updateUsecase.execute(username, updateObj);
 
       if (!updated) {
