@@ -22,10 +22,10 @@ enum Reaction {
   NONE
 }
 
-enum TokenType {
-  ACCESS
-  PERSIST
-}
+// enum TokenType {
+//   ACCESS
+//   PERSIST
+// }
 
 model User {
   id              Int              @id @default(autoincrement())
@@ -121,9 +121,13 @@ model Review {
   productDetail   ProductDetail    @relation(fields: [productDetailId], references: [id])
   productDetailId Int
   comments        Comment[]
-  target          Review           @relation("reviewHierarchy", fields: [targetId], references: [id])
-  subreviews      Review[]         @relation("reviewHierarchy")
-  targetId        Int
+  // // target          Review           @relation("reviewHierarchy", fields: [targetId], references: [id])
+  // subreviews      Review[]         @relation("reviewHierarchy")
+  // // targetId        Int
+  // Review          Review?          @relation(fields: [reviewId], references: [id])
+  // reviewId        Int?
+  // Review          Review?          @relation(fields: [reviewId], references: [id])
+  // Review          Review[]
 }
 
 model Comment {
