@@ -1,5 +1,3 @@
-import { StatusCode } from "../../../utils/responses/http";
-import { ApiError } from "../../../utils/responses/responses";
 import IPasswordService from "../../../utils/security/password/IPasswordService";
 import ITokenService from "../../../utils/security/token/IToken";
 import IUserRepo from "../../domain/IUserRepo";
@@ -46,7 +44,7 @@ export default class RegisterUsecase {
 
       return verifiedUser;
     } catch (error) {
-      Promise.reject(error);
+      return Promise.reject(error);
     }
   }
 }
