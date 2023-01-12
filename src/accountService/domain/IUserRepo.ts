@@ -1,9 +1,9 @@
-import { RegisterCredentials, VerifiedCredentials } from "./UserDto";
+import { RegisterDto, VerifiedCredentials } from "./UserDto";
 
 export default interface IUserRepo {
-  findByEmail(email: string): Promise<VerifiedCredentials>;
+  findByEmail(email: string): Promise<boolean>;
   findByUsername(username: string): Promise<VerifiedCredentials>;
-  persist(user: RegisterCredentials): Promise<VerifiedCredentials>;
-  update(username: string, updateObj: object): Promise<boolean>;
-  delete(username: string): Promise<boolean>;
+  persist(user: RegisterDto): Promise<VerifiedCredentials>;
+  update(id: number, updateObj: object): Promise<VerifiedCredentials>;
+  delete(id: number): Promise<boolean>;
 }

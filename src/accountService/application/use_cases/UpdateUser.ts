@@ -1,14 +1,12 @@
 import IUserRepo from "../../domain/IUserRepo";
-import { UpdateCredentials } from "../../domain/UserDto";
+import { UpdateDto } from "../../domain/UserDto";
 
 export default class UpdateUsecase {
   constructor(private readonly userRepo: IUserRepo) {}
 
-  async execute(username: string, updateObj: UpdateCredentials) {
+  async execute(id: number, updateObj: UpdateDto) {
     try {
-      const userExists = await this.userRepo.findByUsername(username);
-
-      return await this.userRepo.update(userExists.username, updateObj);
+      return await this.userRepo.update(id, updateObj);
     } catch (error) {
       Promise.reject(error);
     }

@@ -1,7 +1,7 @@
 import { HttpResponse, StatusCode } from "../../../utils/responses/http";
 import { ApiError } from "../../../utils/responses/responses";
-import { AuthorizeService } from "../security/Authorization";
-import { AuthCredentials } from "../../domain/UserDto";
+import { AuthorizeService } from "../security/AuthorizeService";
+import { AuthorizeDto } from "../../domain/UserDto";
 
 export default class AuthorizeController {
   constructor(private readonly authService: AuthorizeService) {}
@@ -9,7 +9,7 @@ export default class AuthorizeController {
   async handle({
     accessToken,
     userInfo,
-  }: AuthCredentials): Promise<HttpResponse> {
+  }: AuthorizeDto): Promise<HttpResponse> {
     try {
       if (!accessToken && !userInfo) {
         return {

@@ -4,7 +4,7 @@ import ReAuthorizeController from "../../infrastructure/controllers/ReAuthorizeC
 import {
   AuthorizeService,
   ReAuthorizationService,
-} from "../../infrastructure/security/Authorization";
+} from "../../infrastructure/security/AuthorizeService";
 
 const tokenGenerator = new JwtTokenService();
 const authorizeService = new AuthorizeService(tokenGenerator);

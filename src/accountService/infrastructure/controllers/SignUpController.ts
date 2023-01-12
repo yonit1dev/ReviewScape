@@ -1,11 +1,11 @@
 import RegisterUsecase from "../../application/use_cases/Signup";
-import { RegisterCredentials } from "../../domain/UserDto";
+import { RegisterDto } from "../../domain/UserDto";
 import { HttpResponse, StatusCode } from "../../../utils/responses/http";
 
 export default class SignUpController {
   constructor(private readonly registerUsecase: RegisterUsecase) {}
 
-  async handle(data: RegisterCredentials): Promise<HttpResponse> {
+  async handle(data: RegisterDto): Promise<HttpResponse> {
     try {
       const userSigned = await this.registerUsecase.execute(data);
 

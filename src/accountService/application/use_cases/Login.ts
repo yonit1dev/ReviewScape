@@ -3,7 +3,7 @@ import { ApiError } from "../../../utils/responses/responses";
 import IPasswordService from "../../../utils/security/password/IPasswordService";
 import ITokenService from "../../../utils/security/token/IToken";
 import IUserRepo from "../../domain/IUserRepo";
-import { LoginCredentials, VerifiedCredentials } from "../../domain/UserDto";
+import { LoginDto } from "../../domain/UserDto";
 
 export default class LoginUsecase {
   constructor(
@@ -12,7 +12,7 @@ export default class LoginUsecase {
     private readonly tokenService: ITokenService
   ) {}
 
-  async execute(user: LoginCredentials) {
+  async execute(user: LoginDto) {
     try {
       const userExists = await this.userRepo.findByUsername(user.username);
 
@@ -34,7 +34,8 @@ export default class LoginUsecase {
           id: userExists.id,
           role: userExists.role!,
         },
-        process.env.SECRET_KEY!
+        process.env.SECRET_KEY!,
+        "1h"
       );
 
       const refreshToken = await this.tokenService.generate(
@@ -42,17 +43,16 @@ export default class LoginUsecase {
           id: userExists.id,
           role: userExists.role!,
         },
-        process.env.SECRET_REFRESH!
+        process.env.SECRET_REFRESH!,
+        "1d"
       );
 
-      const verifiedUser: VerifiedCredentials = {
+      return {
         ...userExists,
         password: undefined,
         accessToken,
         refreshToken,
       };
-
-      return verifiedUser;
     } catch (error) {
       return Promise.reject(error);
     }

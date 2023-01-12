@@ -1,11 +1,11 @@
-import { LoginCredentials } from "../../domain/UserDto";
+import { LoginDto } from "../../domain/UserDto";
 import { HttpResponse, StatusCode } from "../../../utils/responses/http";
 import LoginUsecase from "../../application/use_cases/Login";
 
 export default class LoginController {
   constructor(private readonly loginUsecase: LoginUsecase) {}
 
-  async handle(data: LoginCredentials): Promise<HttpResponse> {
+  async handle(data: LoginDto): Promise<HttpResponse> {
     try {
       const userSigned = await this.loginUsecase.execute(data);
 

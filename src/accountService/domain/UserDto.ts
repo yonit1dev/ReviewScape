@@ -1,27 +1,27 @@
-export type LoginCredentials = {
+export type LoginDto = {
   username: string;
   password: string;
 };
 
-export type RegisterCredentials = {
+export type RegisterDto = {
   fullName: string;
   email: string;
   username: string;
   password: string;
   phone: string;
-  role?: string | Array<string>;
+  role?: string;
   isRoot?: boolean;
 };
 
-export type UpdateCredentials = {
+export type UpdateDto = {
   fullName?: string;
   email?: string;
   phone?: string;
 };
 
-export type AuthCredentials = {
+export type AuthorizeDto = {
   accessToken: string;
-  userInfo: { id: number; role: string | Array<string> };
+  userInfo: { id: number; role: string };
 };
 
 export type ReAuthorizeRequest = {
@@ -34,14 +34,8 @@ export type VerifiedCredentials = {
   email: string;
   username: string;
   password?: string;
+  phone: string;
   role?: string | Array<string>;
   accessToken?: string;
   refreshToken?: string;
-};
-
-export type SearchedUser = {
-  fullName: string;
-  username: string;
-  reviews?: Array<object>;
-  comments?: Array<object>;
 };

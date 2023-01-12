@@ -28,7 +28,7 @@ export default class ChangePasswordUsecase {
 
       const modifiedPassword = await this.passwordService.encrypt(newPassword);
 
-      const updated = await this.userRepo.update(userExists.username, {
+      const updated = await this.userRepo.update(userExists.id, {
         password: modifiedPassword,
       });
 

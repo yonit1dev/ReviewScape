@@ -4,9 +4,9 @@ import DeleteUsecase from "../../application/use_cases/DeleteUser";
 export default class DeleteController {
   constructor(private readonly deleteUsecase: DeleteUsecase) {}
 
-  async handle(username: string): Promise<HttpResponse> {
+  async handle(id: number): Promise<HttpResponse> {
     try {
-      const userDeleted = await this.deleteUsecase.execute(username);
+      const userDeleted = await this.deleteUsecase.execute(id);
 
       if (userDeleted) {
         return {

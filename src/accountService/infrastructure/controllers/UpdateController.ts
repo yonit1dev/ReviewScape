@@ -1,19 +1,16 @@
 import { HttpResponse, StatusCode } from "../../../utils/responses/http";
 import ChangePasswordUsecase from "../../application/use_cases/ChangePassword";
 import UpdateUsecase from "../../application/use_cases/UpdateUser";
-import { UpdateCredentials } from "../../domain/UserDto";
+import { UpdateDto } from "../../domain/UserDto";
 
 export default class UpdateController {
   constructor(
     private readonly updateUsecase: UpdateUsecase,
     private readonly changePasswordUsecase: ChangePasswordUsecase
   ) {}
-  async handleNormal(
-    username: string,
-    updateObj: UpdateCredentials
-  ): Promise<HttpResponse> {
+  async handleNormal(id: number, updateObj: UpdateDto): Promise<HttpResponse> {
     try {
-      const updated = await this.updateUsecase.execute(username, updateObj);
+      const updated = await this.updateUsecase.execute(id, updateObj);
 
       if (!updated) {
         return {

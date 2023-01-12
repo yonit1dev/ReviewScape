@@ -1,7 +1,7 @@
 import IPasswordService from "../../../utils/security/password/IPasswordService";
 import ITokenService from "../../../utils/security/token/IToken";
 import IUserRepo from "../../domain/IUserRepo";
-import { RegisterCredentials, VerifiedCredentials } from "../../domain/UserDto";
+import { RegisterDto } from "../../domain/UserDto";
 
 export default class RegisterUsecase {
   constructor(
@@ -10,7 +10,7 @@ export default class RegisterUsecase {
     private readonly tokenService: ITokenService
   ) {}
 
-  async execute(user: RegisterCredentials) {
+  async execute(user: RegisterDto) {
     try {
       const hashedPassword = await this.passwordService.encrypt(user.password);
 
@@ -24,7 +24,8 @@ export default class RegisterUsecase {
           id: createdUser.id,
           role: createdUser.role!,
         },
-        process.env.SECRET_KEY!
+        process.env.SECRET_KEY!,
+        "1h"
       );
 
       const refreshToken = await this.tokenService.generate(
@@ -32,17 +33,16 @@ export default class RegisterUsecase {
           id: createdUser.id,
           role: createdUser.role!,
         },
-        process.env.SECRET_REFRESH!
+        process.env.SECRET_REFRESH!,
+        "1d"
       );
 
-      const verifiedUser: VerifiedCredentials = {
+      return {
         ...createdUser,
         password: undefined,
         accessToken,
         refreshToken,
       };
-
-      return verifiedUser;
     } catch (error) {
       return Promise.reject(error);
     }

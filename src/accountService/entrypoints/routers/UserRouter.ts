@@ -11,27 +11,9 @@ import {
   reAuthorizeController,
 } from "../config/authorize";
 import { UserValidator } from "../../../utils/validation/validators";
-import { User } from "../../domain/User";
+import { checkJwt } from "../../../utils/security/service/Check";
 
 export default class UserRouter {
-  public static async checkJwt(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    const { userInfo } = req.body;
-
-    const result: HttpResponse = await authorizeController.handle({
-      accessToken: req.headers.authorization ?? "",
-      userInfo,
-    });
-
-    if (result.status != 200) {
-      res.status(result.status).json(result.data);
-      return;
-    }
-    next();
-  }
   public static configRouter() {
     const router = Router();
 
@@ -75,37 +57,33 @@ export default class UserRouter {
       res.status(response.status).json(response.data);
     });
 
-    router.patch(
-      "/update",
-      UserRouter.checkJwt,
-      async (req: Request, res: Response) => {
-        const { username, updateReq } = req.body;
+    router.patch("/update", checkJwt, async (req: Request, res: Response) => {
+      const { username, updateReq } = req.body;
 
-        if ("oldPassword" in updateReq) {
-          const response: HttpResponse = await updateController.handlePassword(
-            username,
-            updateReq.oldPassword,
-            updateReq.newPassword
-          );
+      if ("oldPassword" in updateReq) {
+        const response: HttpResponse = await updateController.handlePassword(
+          username,
+          updateReq.oldPassword,
+          updateReq.newPassword
+        );
 
-          res.status(response.status).json(response.data);
-        } else {
-          const response: HttpResponse = await updateController.handleNormal(
-            username,
-            updateReq
-          );
-          res.status(response.status).json(response.data);
-        }
+        res.status(response.status).json(response.data);
+      } else {
+        const response: HttpResponse = await updateController.handleNormal(
+          username,
+          updateReq
+        );
+        res.status(response.status).json(response.data);
       }
-    );
+    });
 
     router.delete(
       "/delete/:username",
-      UserRouter.checkJwt,
+      checkJwt,
       async (req: Request, res: Response) => {
-        const username = req.params.username;
+        const id = Number(res.locals.id);
 
-        const response: HttpResponse = await deleteController.handle(username);
+        const response: HttpResponse = await deleteController.handle(id);
 
         res.status(response.status).json(response.data);
       }

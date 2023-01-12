@@ -1,7 +1,7 @@
 import { HttpResponse, StatusCode } from "../../../utils/responses/http";
 import { ApiError } from "../../../utils/responses/responses";
 import { ReAuthorizeRequest } from "../../domain/UserDto";
-import { ReAuthorizationService } from "../security/Authorization";
+import { ReAuthorizationService } from "../security/AuthorizeService";
 
 export default class ReAuthorizeController {
   constructor(private readonly reAuthorizeService: ReAuthorizationService) {}

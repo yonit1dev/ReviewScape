@@ -1,12 +1,12 @@
 import { StatusCode } from "../../../utils/responses/http";
 import { ApiError } from "../../../utils/responses/responses";
 import ITokenService from "../../../utils/security/token/IToken";
-import { AuthCredentials } from "../../domain/UserDto";
+import { AuthorizeDto } from "../../domain/UserDto";
 
 export class AuthorizeService {
   constructor(private readonly tokenService: ITokenService) {}
 
-  async execute({ accessToken, userInfo }: AuthCredentials) {
+  async execute({ accessToken, userInfo }: AuthorizeDto) {
     const sanitizedToken = accessToken.replace("Bearer", "");
 
     const validToken = await this.tokenService.validate(
@@ -33,7 +33,7 @@ export class AuthorizeService {
       return error;
     }
 
-    const authorizedUser: AuthCredentials = {
+    const authorizedUser: AuthorizeDto = {
       accessToken,
       userInfo,
     };
@@ -65,7 +65,8 @@ export class ReAuthorizationService {
 
     const newAccessToken = await this.tokenService.generate(
       user,
-      process.env.SECRET_KEY!
+      process.env.SECRET_KEY!,
+      "1h"
     );
 
     return newAccessToken;
