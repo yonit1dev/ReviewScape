@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpResponse, StatusCode } from "../../responses/http";
-import AuthorizeController from "../../../accountService/infrastructure/controllers/AuthorizeController";
 import { authorizeController } from "../../../accountService/entrypoints/config/authorize";
 
 const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,23 +19,26 @@ const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-const checkRole = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  role: string
-) => {
-  const userRole = res.locals.role;
+const checkRole = () => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+    role: string
+  ) => {
+    const userRole = res.locals.role;
 
-  if (userRole !== role) {
-    const result: HttpResponse = {
-      status: StatusCode.FORBIDDEN,
-      data: "Forbidden to access this resource!",
-    };
+    if (userRole !== role) {
+      const result: HttpResponse = {
+        status: StatusCode.FORBIDDEN,
+        data: "Forbidden to access this resource!",
+      };
 
-    return res.status(result.status).json({ error: result.data });
-  }
-  next();
+      res.status(result.status).json({ error: result.data });
+      return;
+    }
+    next();
+  };
 };
 
 export { checkJwt, checkRole };

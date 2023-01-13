@@ -11,7 +11,7 @@ import {
   reAuthorizeController,
 } from "../config/authorize";
 import { UserValidator } from "../../../utils/validation/validators";
-import { checkJwt } from "../../../utils/security/service/Check";
+import { checkJwt, checkRole } from "../../../utils/security/service/Check";
 
 export default class UserRouter {
   public static configRouter() {
